@@ -19,7 +19,6 @@ check_string <- function(string_arg,
 
   # Check for NULL if not allowed
   if (is.null(string_arg) && isFALSE(allow_null)) {
-    print("test failed")
     stop(
       sprintf(
         "Argument '%s' in function '%s' must be a non-NULL character string.",
@@ -30,10 +29,10 @@ check_string <- function(string_arg,
     )
   }
 
-  # NULL does not have a type, return NULL
+  # NULL does not have a type, return NULL, no further tests should be done
   if (is.null(string_arg)) return(NULL)
 
-  # NA or NaN can be of any type return as.character(string_arg)
+  # NA or NaN can be of any type return as.character(string_arg), no further test should be done
   if (!is.null(string_arg) && length(string_arg)==1 && isTRUE(allow_na) && is.na(string_arg))
     return(as.character(string_arg))
 
