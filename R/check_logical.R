@@ -6,7 +6,7 @@
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #' @param allow_na Logical. If TRUE, NA logicals are allowed. Default is FALSE.
 #'
-#' @return Returns \code{logical_arg} if all checks pass; otherwise throws an error.
+#' @return Invisibly returns \code{logical_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_logical(TRUE)
 #' check_logical(NULL, allow_null = TRUE)
@@ -71,5 +71,5 @@ check_logical <- function(logical_arg,
   }
 
   # All checks passed; return the logical argument
-  logical_arg
+  invisible(logical_arg)
 }

@@ -30,3 +30,7 @@ test_that("indirect allow_null works", {
 test_that("indirect allow_na works", {
   expect_true(is.na(test_check_numeric(as.character(NA), allow_na = TRUE)))
 })
+
+test_that("indirect allow_inf works", {
+  expect_true(is.infinite(test_check_numeric(Inf, allow_inf = TRUE)))
+})

@@ -1,13 +1,13 @@
 #' Check a character string for typical errors
 #'
-#' Validates a single character string argument for type, length, NA, NULL, and empty string.
+#' Validates a single character string argument for type, NA, NULL, and empty string.
 #'
 #' @param string_arg Character string to check.
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #' @param allow_na Logical. If TRUE, NA strings are allowed. Default is FALSE.
 #' @param allow_empty Logical. If TRUE, empty strings "" are allowed. Default is FALSE.
 #'
-#' @return Returns \code{string_arg} if all checks pass; otherwise throws an error.
+#' @return Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_string("abc")
 #' check_string(NULL, allow_null = TRUE)
@@ -85,5 +85,5 @@ check_string <- function(string_arg,
   }
 
   # All checks passed; return the string argument
-  string_arg
+  invisible(string_arg)
 }

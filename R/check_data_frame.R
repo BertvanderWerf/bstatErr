@@ -5,7 +5,7 @@
 #' @param data.frame_arg data.frame to check.
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #'
-#' @return Returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
+#' @return Invisibly returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_data.frame(data.frame("abc",c(1,2,3)))
 #' check_data.frame(NULL, allow_null = TRUE)
@@ -41,5 +41,5 @@ check_data_frame <- function(data_frame_arg,
   }
 
   # All checks passed; return the data.frame argument
-  data_frame_arg
+  invisible(data_frame_arg)
 }

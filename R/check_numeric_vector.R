@@ -5,17 +5,19 @@
 #' @param numeric_arg numeric to check.
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #' @param allow_na Logical. If TRUE, NA numerics are allowed. Default is FALSE.
-#' @param allow_inf Logical. If TRUE, -Inf and Inf numerics are allowed. Default is FALSE.
+#' @param allow_inf Logical. If TRUE, -Inf or Inf numerics are allowed. Default is FALSE.
+#' @param allow_zero_length Logical. If TRUE, zero length vectors are allowed. Default is FALSE
 #'
 #' @return Invisibly returns \code{numeric_arg} if all checks pass; otherwise throws an error.
 #' @examples
-#' check_numeric(TRUE)
-#' check_numeric(NULL, allow_null = TRUE)
+#' check_numeric_vector(TRUE)
+#' check_numeric_vector(NULL, allow_null = TRUE)
 #' @export
-check_numeric <- function(numeric_arg,
+check_numeric_vector <- function(numeric_arg,
                           allow_null = FALSE,
                           allow_na = FALSE,
-                          allow_inf = FALSE) {
+                          allow_inf = FALSE,
+                          allow_zero_length = FALSE) {
 
   # Check for NULL if not allowed
   if (is.null(numeric_arg) && isFALSE(allow_null)) {
@@ -48,11 +50,11 @@ check_numeric <- function(numeric_arg,
     )
   }
 
-  # Check length == 1 if not NULL
-  if (!is.null(numeric_arg) && length(numeric_arg) != 1) {
+  # Check length == 0 if not NULL
+  if (!is.null(numeric_arg) && length(numeric_arg) == 0 && isFALSE(allow_zero_length)) {
     stop(
       sprintf(
-        "Argument '%s' in function '%s' must be a single numeric value.",
+        "Argument '%s' in function '%s' has zero length, the vector must have at least one value.",
         as.character(substitute(numeric_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),
@@ -61,10 +63,22 @@ check_numeric <- function(numeric_arg,
   }
 
   # Check for NA values if not allowed
-  if (!is.null(numeric_arg) && isFALSE(allow_na) && is.na(numeric_arg)) {
+  if (!is.null(numeric_arg) && isFALSE(allow_na) && any(is.na(numeric_arg))) {
     stop(
       sprintf(
-        "Argument '%s' in function '%s' must not be NA or NaN.",
+        "Argument '%s' in function '%s' must not contain missing values.",
+        as.character(substitute(numeric_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check for non finite values if not allowed
+  if (!is.null(numeric_arg) && isFALSE(allow_inf) && any(!is.finite(numeric_arg))) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must not contain missing values.",
         as.character(substitute(numeric_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),

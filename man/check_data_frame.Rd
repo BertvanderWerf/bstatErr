@@ -12,7 +12,7 @@ check_data_frame(data_frame_arg, allow_null = FALSE)
 \item{data.frame_arg}{data.frame to check.}
 }
 \value{
-Returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
 }
 \description{
 Validates a single data.frame argument for type, length, NA and NULL data.frame value.

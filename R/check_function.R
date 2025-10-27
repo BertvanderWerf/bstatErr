@@ -5,7 +5,7 @@
 #' @param function_arg function to check.
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #'
-#' @return Returns \code{function_arg} if all checks pass; otherwise throws an error.
+#' @return Invisibly returns \code{function_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_function(mean)
 #' check_function(NULL, allow_null = TRUE)
@@ -41,5 +41,5 @@ check_function <- function(function_arg,
   }
 
   # All checks passed; return the function argument
-  function_arg
+  invisible(function_arg)
 }

@@ -14,7 +14,7 @@ check_logical(logical_arg, allow_null = FALSE, allow_na = FALSE)
 \item{allow_na}{Logical. If TRUE, NA logicals are allowed. Default is FALSE.}
 }
 \value{
-Returns \code{logical_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{logical_arg} if all checks pass; otherwise throws an error.
 }
 \description{
 Validates a single logical argument for type, length, NA and NULL logical value.

@@ -12,7 +12,7 @@ check_function(function_arg, allow_null = FALSE)
 \item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
 }
 \value{
-Returns \code{function_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{function_arg} if all checks pass; otherwise throws an error.
 }
 \description{
 Validates a single function argument for type and NULL function.

@@ -12,10 +12,10 @@ check_list(list_arg, allow_null = FALSE)
 \item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
 }
 \value{
-Returns \code{list_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{list_arg} if all checks pass; otherwise throws an error.
 }
 \description{
-Validates a single list argument for type, length, NA and NULL list value.
+Validates a single list argument for type and NULL list value.
 }
 \examples{
 check_list(list("abc",c(1,2,3)))

@@ -1,11 +1,11 @@
 #' Check a list for typical errors
 #'
-#' Validates a single list argument for type, length, NA and NULL list value.
+#' Validates a single list argument for type and NULL list value.
 #'
 #' @param list_arg list to check.
 #' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
 #'
-#' @return Returns \code{list_arg} if all checks pass; otherwise throws an error.
+#' @return Invisibly returns \code{list_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_list(list("abc",c(1,2,3)))
 #' check_list(NULL, allow_null = TRUE)
@@ -41,5 +41,5 @@ check_list <- function(list_arg,
   }
 
   # All checks passed; return the list argument
-  list_arg
+  invisible(list_arg)
 }

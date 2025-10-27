@@ -21,10 +21,10 @@ check_string(
 \item{allow_empty}{Logical. If TRUE, empty strings "" are allowed. Default is FALSE.}
 }
 \value{
-Returns \code{string_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
 }
 \description{
-Validates a single character string argument for type, length, NA, NULL, and empty string.
+Validates a single character string argument for type, NA, NULL, and empty string.
 }
 \examples{
 check_string("abc")
