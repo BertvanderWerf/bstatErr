@@ -14,6 +14,6 @@ Provides helper functions for type checking and validation.
 }
 
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Bert van der Werf \email{bert.vanderwerf@auckland.ac.nz} (\href{https://orcid.org/0000-0003-3072-5937}{ORCID})
 
 }
