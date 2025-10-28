@@ -9,7 +9,8 @@ check_numeric_vector(
   allow_null = FALSE,
   allow_na = FALSE,
   allow_inf = FALSE,
-  allow_zero_length = FALSE
+  allow_zero_length = FALSE,
+  must_have_names = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ check_numeric_vector(
 \item{allow_inf}{Logical. If TRUE, -Inf or Inf numerics are allowed. Default is FALSE.}
 
 \item{allow_zero_length}{Logical. If TRUE, zero length vectors are allowed. Default is FALSE}
+
+\item{must_have_names}{Logical. If TRUE, vector elements must have unique names. Default is FALSE.}
 }
 \value{
 Invisibly returns \code{numeric_arg} if all checks pass; otherwise throws an error.

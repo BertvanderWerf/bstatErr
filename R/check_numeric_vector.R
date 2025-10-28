@@ -7,6 +7,7 @@
 #' @param allow_na Logical. If TRUE, NA numerics are allowed. Default is FALSE.
 #' @param allow_inf Logical. If TRUE, -Inf or Inf numerics are allowed. Default is FALSE.
 #' @param allow_zero_length Logical. If TRUE, zero length vectors are allowed. Default is FALSE
+#' @param must_have_names Logical. If TRUE, vector elements must have unique names. Default is FALSE.
 #'
 #' @return Invisibly returns \code{numeric_arg} if all checks pass; otherwise throws an error.
 #' @examples
@@ -17,7 +18,8 @@ check_numeric_vector <- function(numeric_arg,
                                  allow_null = FALSE,
                                  allow_na = FALSE,
                                  allow_inf = FALSE,
-                                 allow_zero_length = FALSE) {
+                                 allow_zero_length = FALSE,
+                                 must_have_names = FALSE) {
 
   # Check for NULL if not allowed
   if (is.null(numeric_arg) && isFALSE(allow_null)) {
@@ -79,6 +81,21 @@ check_numeric_vector <- function(numeric_arg,
     stop(
       sprintf(
         "Argument '%s' in function '%s' must not contain missing values.",
+        as.character(substitute(numeric_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+
+  # Check if list must have names
+  if (!is.null(numeric_arg) && isTRUE(must_have_names) &&
+      (is.null(names(numeric_arg)) || any(!is.na(names(numeric_arg)) & names(numeric_arg)=='') || any(duplicated(names(numeric_arg))))
+  ) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a vector with unique names unequal to ''.",
         as.character(substitute(numeric_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),

@@ -40,3 +40,8 @@ test_that("indirect allow_duplicates works", {
   expect_error(test_check_string_vector(c("a", "a", "b"), allow_duplicates = FALSE), "Argument 'str' in function 'test_check_string_vector' must not contain duplicated values.")
 })
 
+test_that("indirect must_have_names works", {
+  expect_equal(test_check_string_vector(c(a="xyz", b="abc")), c(a="xyz", b="abc"))
+  expect_equal(test_check_string_vector(c(a="xyz", b="abc"), must_have_names = TRUE), c(a="xyz", b="abc"))
+  expect_error(test_check_string_vector(c(a="xyz", b="abc", "XYZ"), must_have_names = TRUE), "Argument 'str' in function 'test_check_string_vector' must be a vector with unique names unequal to ''.")
+})

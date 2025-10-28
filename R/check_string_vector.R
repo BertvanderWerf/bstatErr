@@ -8,6 +8,7 @@
 #' @param allow_zero_length Logical. If TRUE, zero length vectors are allowed. Default is FALSE
 #' @param allow_empty Logical. If TRUE, empty strings ("") are allowed. Default is FALSE
 #' @param allow_duplicates Logical. If TRUE, duplicate values are allowed. Default is FALSE
+#' @param must_have_names Logical. If TRUE, vector elements must have unique names. Default is FALSE.
 #'
 #' @return Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
 #' @examples
@@ -19,7 +20,8 @@ check_string_vector <- function(string_arg,
                                 allow_na = FALSE,
                                 allow_zero_length = FALSE,
                                 allow_empty = FALSE,
-                                allow_duplicates = FALSE) {
+                                allow_duplicates = FALSE,
+                                must_have_names = FALSE) {
 
   # Check for NULL if not allowed
   if (is.null(string_arg) && isFALSE(allow_null)) {
@@ -93,6 +95,20 @@ check_string_vector <- function(string_arg,
     stop(
       sprintf(
         "Argument '%s' in function '%s' must not contain duplicated values.",
+        as.character(substitute(string_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check if list must have names
+  if (!is.null(string_arg) && isTRUE(must_have_names) &&
+      (is.null(names(string_arg)) || any(!is.na(names(string_arg)) & names(string_arg)=='') || any(duplicated(names(string_arg))))
+  ) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a vector with unique names unequal to ''.",
         as.character(substitute(string_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),

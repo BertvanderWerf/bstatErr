@@ -10,7 +10,8 @@ check_string_vector(
   allow_na = FALSE,
   allow_zero_length = FALSE,
   allow_empty = FALSE,
-  allow_duplicates = FALSE
+  allow_duplicates = FALSE,
+  must_have_names = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ check_string_vector(
 \item{allow_empty}{Logical. If TRUE, empty strings ("") are allowed. Default is FALSE}
 
 \item{allow_duplicates}{Logical. If TRUE, duplicate values are allowed. Default is FALSE}
+
+\item{must_have_names}{Logical. If TRUE, vector elements must have unique names. Default is FALSE.}
 }
 \value{
 Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
