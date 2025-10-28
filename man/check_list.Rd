@@ -4,12 +4,14 @@
 \alias{check_list}
 \title{Check a list for typical errors}
 \usage{
-check_list(list_arg, allow_null = FALSE)
+check_list(list_arg, allow_null = FALSE, must_have_names = FALSE)
 }
 \arguments{
 \item{list_arg}{list to check.}
 
 \item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+
+\item{must_have_names}{Logical. If TRUE, list must have unique names. Default is FALSE.}
 }
 \value{
 Invisibly returns \code{list_arg} if all checks pass; otherwise throws an error.

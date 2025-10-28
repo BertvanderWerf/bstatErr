@@ -14,10 +14,10 @@
 #' check_numeric_vector(NULL, allow_null = TRUE)
 #' @export
 check_numeric_vector <- function(numeric_arg,
-                          allow_null = FALSE,
-                          allow_na = FALSE,
-                          allow_inf = FALSE,
-                          allow_zero_length = FALSE) {
+                                 allow_null = FALSE,
+                                 allow_na = FALSE,
+                                 allow_inf = FALSE,
+                                 allow_zero_length = FALSE) {
 
   # Check for NULL if not allowed
   if (is.null(numeric_arg) && isFALSE(allow_null)) {
@@ -75,7 +75,7 @@ check_numeric_vector <- function(numeric_arg,
   }
 
   # Check for non finite values if not allowed
-  if (!is.null(numeric_arg) && isFALSE(allow_inf) && any(!is.finite(numeric_arg))) {
+  if (!is.null(numeric_arg) && isFALSE(allow_inf) && any(!is.na(numeric_arg) & is.infinite(numeric_arg))) {
     stop(
       sprintf(
         "Argument '%s' in function '%s' must not contain missing values.",

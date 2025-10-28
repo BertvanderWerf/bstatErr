@@ -10,8 +10,7 @@
 #' check_function(mean)
 #' check_function(NULL, allow_null = TRUE)
 #' @export
-check_function <- function(function_arg,
-                          allow_null = FALSE) {
+check_function <- function(function_arg, allow_null = FALSE) {
 
   # Check for NULL if not allowed
   if (is.null(function_arg) && isFALSE(allow_null)) {

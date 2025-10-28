@@ -4,10 +4,12 @@
 \alias{check_data_frame}
 \title{Check a data.frame for typical errors}
 \usage{
-check_data_frame(data_frame_arg, allow_null = FALSE)
+check_data_frame(data_frame_arg, allow_null = FALSE, allow_zero_length = FALSE)
 }
 \arguments{
 \item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+
+\item{allow_zero_length}{Logical. If TRUE, a data frame with zero number of rows is accepted as a valid value. Default is FALSE.}
 
 \item{data.frame_arg}{data.frame to check.}
 }
