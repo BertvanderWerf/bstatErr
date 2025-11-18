@@ -1,13 +1,20 @@
 Package: bstatErr
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9001
-Authors@R: 
-    person("Bert", "van der Werf", email="bert.vanderwerf@auckland.ac.nz", role = c("aut", "cre"), comment=c(ORCID = "0000-0003-3072-5937") )
-Description: What the package does (one paragraph).
+Title: The `bstatErr` package provides comprehensive input validation functions for R packages.
+Version: 1.0.1
+Authors@R: c(
+    person("Bert", "van der Werf", email="bert.vanderwerf@auckland.ac.nz", 
+      role = c("aut", "cre"), comment=c(ORCID = "0000-0003-3072-5937")),
+    person("Perplexity AI", role = "ctb", 
+           comment = "AI assistance in development")
+    )
+Description: The `bstatErr` package provides comprehensive input validation functions for R packages. Writing robust validation code for every function can be tedious and error-prone. bstatErr simplifies this by providing ready-to-use validation functions with consistent error messages.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr

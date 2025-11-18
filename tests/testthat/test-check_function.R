@@ -8,11 +8,11 @@ test_that("indirect basic check succeeds", {
 })
 
 test_that("indirect type error", {
-  expect_error(test_check_function(1), "Argument 'fun' in function 'test_check_function' must be a function name")
+  expect_error(test_check_function(1), "Argument 'fun' in function 'test_check_function' must be a function")
 })
 
 test_that("indirect null error", {
-  expect_error(test_check_function(NULL), "Argument 'fun' in function 'test_check_function' must be a non-NULL function name")
+  expect_error(test_check_function(NULL), "Argument 'fun' in function 'test_check_function' must be a non-NULL function")
 })
 
 test_that("indirect allow_null works", {

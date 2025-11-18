@@ -1,70 +1,117 @@
 #' Evaluate an Expression and Capture Condition Objects
 #'
-#' Evaluates an expression while capturing and returning any warning, message, or error conditions as structured objects.
-#' This allows advanced inspection of errors and warnings (including class, call, and metadata) instead of storing only their messages.
+#' Evaluates an expression while capturing and returning any warning, message,
+#' or error conditions as structured objects. This allows advanced inspection of
+#' errors and warnings instead of storing only their messages.
+#'
+#' @details
+#' This function uses R's condition handling system to capture three types of
+#' conditions:
+#' \itemize{
+#'   \item **Errors** (class inherits from "error"): Stops execution
+#'   \item **Warnings** (class inherits from "warning"): Non-fatal issues
+#'   \item **Messages** (class inherits from "message"): Informational output
+#' }
+#'
+#' Unlike \code{tryCatch()}, this captures the condition *objects* themselves,
+#' which include:
+#' \itemize{
+#'   \item The message text
+#'   \item The call that generated it
+#'   \item The condition class
+#'   \item Any custom fields
+#' }
+#'
+#' Multiple warnings and messages are collected in a list.
 #'
 #' @param expr Expression to evaluate (enclosed in braces or as a call).
-#' @param default Value to return if an error occurs. Default: `NULL`.
+#' @param default Value to return if an error occurs. Default: \code{NULL}.
 #'
-#' @returns
-#' A list with elements:
+#' @return A list with elements:
 #' \itemize{
-#'   \item `value` — The evaluation result or the fallback `default` if an error occurred.
-#'   \item `warning` — A list of captured warning condition objects (or `NULL` if none).
-#'   \item `message` — A list of captured message condition objects (or `NULL` if none).
-#'   \item `error` — An error condition object if an error occurred (or `NULL` otherwise).
+#'   \item \code{value}: The evaluation result or the \code{default} if error occurred
+#'   \item \code{error}: Error condition object (or NULL if none)
+#'   \item \code{warning}: List of warning condition objects (or NULL if none)
+#'   \item \code{message}: List of message condition objects (or NULL if none)
 #' }
 #'
 #' @examples
-#' # 1. Normal evaluation
-#' catch_conditions({ 2 + 2 })
+#' # Normal evaluation with no conditions
+#' result <- catch_conditions({ 2 + 2 })
+#' print(result$value)  # 4
 #'
-#' # 2. Capture warnings and messages
-#' catch_conditions({
-#'   message("Computation started")
-#'   log(-1)
+#' # Capture warnings
+#' result <- catch_conditions({
+#'   x <- c(1, 2, NA)
+#'   mean(x)
 #' })
 #'
-#' # 3. Capture error and return fallback
-#' res <- catch_conditions(stop("Critical failure"), default = NA)
-#' res$error[[1]]$message    # Inspect full error object
+#' # Capture error with default value
+#' result <- catch_conditions({
+#'   stop("Something went wrong!")
+#' }, default = NA)
+#' print(result$error$message)
 #'
 #' @export
 catch_conditions <- function(expr, default = NULL) {
-  warnings_list <- list()
-  messages_list <- list()
-  error_obj <- NULL
 
-  # Warning handler – collect condition objects, not strings
-  warning_handler <- function(w) {
-    warnings_list <<- append(warnings_list, list(w))
-    invokeRestart("muffleWarning")  # Continue execution quietly
+  # ============================================================================
+  # INITIALIZE RESULT STRUCTURE
+  # ============================================================================
+
+  # Result list to hold all captured conditions
+  result <- list(
+    value = NULL,
+    error = NULL,
+    warning = NULL,
+    message = NULL
+  )
+
+  # ============================================================================
+  # EVALUATE EXPRESSION WITH CONDITION HANDLERS
+  # ============================================================================
+
+  # Use tryCatch to evaluate expression and capture conditions
+  result$value <- tryCatch(
+    # EXPRESSION TO EVALUATE
+    {
+      # Capture multiple warnings and messages using withCallingHandlers
+      withCallingHandlers(
+        expr,
+        # HANDLE WARNINGS
+        warning = function(w) {
+          # Store warning condition object (not just message)
+          if (is.null(result$warning)) {
+            result$warning <<- list()
   }
-
-  # Message handler – collect message objects
-  message_handler <- function(m) {
-    messages_list <<- append(messages_list, list(m))
+          result$warning <<- c(result$warning, list(w))
+          # Call invokeRestart to continue execution
+          invokeRestart("muffleWarning")
+        },
+        # HANDLE MESSAGES
+        message = function(m) {
+          # Store message condition object
+          if (is.null(result$message)) {
+            result$message <<- list()
+          }
+          result$message <<- c(result$message, list(m))
+          # Call invokeRestart to continue execution
     invokeRestart("muffleMessage")
   }
-
-  # Error handler – capture the error object, return fallback
-  error_handler <- function(e) {
-    error_obj <<- e
-    default
+      )
+    },
+    # HANDLE ERRORS
+    error = function(e) {
+      # Store error condition object
+      result$error <<- e
+      # Return default value instead of stopping
+      return(default)
   }
-
-  # Execute expression inside withCallingHandlers + tryCatch
-  result <- withCallingHandlers(
-    tryCatch(expr, error = error_handler),
-    warning = warning_handler,
-    message = message_handler
   )
 
-  # Return structured result containing full condition objects
-  list(
-    value = result,
-    warning = if (length(warnings_list)) warnings_list else NULL,
-    message = if (length(messages_list)) messages_list else NULL,
-    error = error_obj
-  )
+  # ============================================================================
+  # RETURN CAPTURED CONDITIONS
+  # ============================================================================
+
+  invisible(result)
 }

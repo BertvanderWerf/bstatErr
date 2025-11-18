@@ -29,6 +29,7 @@
 #' @return Invisibly returns \code{function_arg} if all checks pass;
 #'   otherwise throws an error.
 #'
+#' @return Invisibly returns \code{function_arg} if all checks pass; otherwise throws an error.
 #' @examples
 #' check_function(mean)
 #' check_function(function(x) x + 1)

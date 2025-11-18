@@ -32,3 +32,4 @@ test_that("returns no conditions for normal evaluation", {
   expect_null(res$error)
   expect_equal(res$value, 2)
 })
+

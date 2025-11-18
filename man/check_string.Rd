@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_string.R
 \name{check_string}
 \alias{check_string}
-\title{Check a character string for typical errors}
+\title{Check a Character String for Typical Errors}
 \usage{
 check_string(
   string_arg,
@@ -14,19 +14,31 @@ check_string(
 \arguments{
 \item{string_arg}{Character string to check.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 
-\item{allow_na}{Logical. If TRUE, NA strings are allowed. Default is FALSE.}
+\item{allow_na}{Logical. If TRUE, NA values allowed. Default FALSE.}
 
-\item{allow_empty}{Logical. If TRUE, empty strings "" are allowed. Default is FALSE.}
+\item{allow_empty}{Logical. If TRUE, empty strings allowed. Default FALSE.}
 }
 \value{
-Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{string_arg} if all checks pass.
 }
 \description{
 Validates a single character string argument for type, NA, NULL, and empty string.
 }
+\details{
+Validates in sequence:
+\enumerate{
+\item Checks if NULL when not allowed
+\item Handles single NA specially
+\item Checks if character type
+\item Checks for NA value when not allowed
+\item Checks for empty string when not allowed
+}
+}
 \examples{
-check_string("abc")
-check_string(NULL, allow_null = TRUE)
+check_string("hello")
+check_string("", allow_empty = TRUE)
+check_string(NA_character_, allow_na = TRUE)
+
 }

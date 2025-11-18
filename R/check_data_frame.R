@@ -1,19 +1,42 @@
-#' Check a data.frame for typical errors
+#' Check a Data Frame for Typical Errors
 #'
-#' Validates a single data.frame argument for type, length, NA and NULL data.frame value.
+#' Validates a data frame argument for type, NULL, and number of rows.
 #'
-#' @param data.frame_arg data.frame to check.
-#' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
-#' @param allow_zero_length Logical. If TRUE, a data frame with zero number of rows is accepted as a valid value. Default is FALSE.
+#' @details
+#' Validates in sequence:
+#' \enumerate{
+#'   \item Validates logical parameters
+#'   \item Checks if NULL when not allowed
+#'   \item Checks if input is data.frame type
+#'   \item Checks for zero rows when not allowed
+#' }
 #'
-#' @return Invisibly returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
+#' @param data_frame_arg Data frame to check.
+#' @param allow_null Logical. If TRUE, NULL is accepted. Default FALSE.
+#' @param allow_zero_rows Logical. If TRUE, empty data frames allowed. Default FALSE.
+#'
+#' @return Invisibly returns \code{data_frame_arg} if all checks pass.
+#'
 #' @examples
-#' check_data.frame(data.frame("abc",c(1,2,3)))
-#' check_data.frame(NULL, allow_null = TRUE)
+#' check_data_frame(mtcars)
+#' check_data_frame(NULL, allow_null = TRUE)
+#'
 #' @export
-check_data_frame <- function(data_frame_arg, allow_null = FALSE, allow_zero_length = FALSE) {
+check_data_frame <- function(data_frame_arg,
+                             allow_null = FALSE,
+                             allow_zero_rows = FALSE) {
 
-  # Check for NULL if not allowed
+  # ============================================================================
+  # VALIDATE LOGICAL PARAMETERS
+  # ============================================================================
+
+  check_logical(allow_null)
+  check_logical(allow_zero_rows)
+
+  # ============================================================================
+  # CHECK FOR NULL
+  # ============================================================================
+
   if (is.null(data_frame_arg) && isFALSE(allow_null)) {
     stop(
       sprintf(
@@ -25,11 +48,15 @@ check_data_frame <- function(data_frame_arg, allow_null = FALSE, allow_zero_leng
     )
   }
 
-  # NULL does not have a type, return NULL, no further tests should be done
-  if (is.null(data_frame_arg)) return(NULL)
+  if (is.null(data_frame_arg)) {
+    return(invisible(NULL))
+  }
 
-  # Check type if not NULL
-  if (!is.null(data_frame_arg) && !is.data.frame(data_frame_arg)) {
+  # ============================================================================
+  # CHECK TYPE
+  # ============================================================================
+
+  if (!is.data.frame(data_frame_arg)) {
     stop(
       sprintf(
         "Argument '%s' in function '%s' must be a data.frame.",
@@ -40,11 +67,14 @@ check_data_frame <- function(data_frame_arg, allow_null = FALSE, allow_zero_leng
     )
   }
 
-  # Check data_frame has rows
-  if (!is.null(data_frame_arg) && isFALSE(allow_zero_length) && nrow(data_frame_arg)==0) {
+  # ============================================================================
+  # CHECK FOR ZERO ROWS
+  # ============================================================================
+
+  if (nrow(data_frame_arg) == 0 && isFALSE(allow_zero_rows)) {
     stop(
       sprintf(
-        "Argument '%s' in function '%s' must at least have 1 row in the data.frame.",
+        "Argument '%s' in function '%s' has zero rows; must have at least one row.",
         as.character(substitute(data_frame_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),
@@ -52,6 +82,9 @@ check_data_frame <- function(data_frame_arg, allow_null = FALSE, allow_zero_leng
     )
   }
 
-  # All checks passed; return the data.frame argument
+  # ============================================================================
+  # RETURN VALIDATED VALUE
+  # ============================================================================
+
   invisible(data_frame_arg)
 }

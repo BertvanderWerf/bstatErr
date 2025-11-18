@@ -2,24 +2,35 @@
 % Please edit documentation in R/check_list.R
 \name{check_list}
 \alias{check_list}
-\title{Check a list for typical errors}
+\title{Check a List for Typical Errors}
 \usage{
 check_list(list_arg, allow_null = FALSE, must_have_names = FALSE)
 }
 \arguments{
-\item{list_arg}{list to check.}
+\item{list_arg}{List to check.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 
-\item{must_have_names}{Logical. If TRUE, list must have unique names. Default is FALSE.}
+\item{must_have_names}{Logical. If TRUE, all elements must have names. Default FALSE.}
 }
 \value{
-Invisibly returns \code{list_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{list_arg} if all checks pass.
 }
 \description{
-Validates a single list argument for type and NULL list value.
+Validates a list argument for type, NULL, and optional naming requirements.
+}
+\details{
+Validates in sequence:
+\enumerate{
+\item Validates logical parameters
+\item Checks if NULL when not allowed
+\item Checks if input is list type
+\item Checks for required names and uniqueness
+}
 }
 \examples{
-check_list(list("abc",c(1,2,3)))
+check_list(list(a = 1, b = 2))
+check_list(list(1, 2, 3))
 check_list(NULL, allow_null = TRUE)
+
 }

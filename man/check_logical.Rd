@@ -2,24 +2,41 @@
 % Please edit documentation in R/check_logical.R
 \name{check_logical}
 \alias{check_logical}
-\title{Check a logical for typical errors}
+\title{Check a Logical Value for Typical Errors}
 \usage{
 check_logical(logical_arg, allow_null = FALSE, allow_na = FALSE)
 }
 \arguments{
-\item{logical_arg}{logical to check.}
+\item{logical_arg}{Logical value to check (TRUE, FALSE, or NA).}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 
-\item{allow_na}{Logical. If TRUE, NA logicals are allowed. Default is FALSE.}
+\item{allow_na}{Logical. If TRUE, NA values are allowed. Default FALSE.}
 }
 \value{
-Invisibly returns \code{logical_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{logical_arg} if all checks pass;
+otherwise throws an error.
 }
 \description{
-Validates a single logical argument for type, length, NA and NULL logical value.
+Validates a single logical argument for type, NA values, and NULL.
+Provides consistent error messages that include the argument name and
+calling function name.
+}
+\details{
+This function performs validation checks in sequence:
+\enumerate{
+\item Validates logical parameters
+\item Checks if NULL when not allowed
+\item Returns NULL early if allowed
+\item Handles single NA value specially
+\item Checks if input is logical type
+\item Checks for NA values when not allowed
+}
 }
 \examples{
 check_logical(TRUE)
+check_logical(FALSE)
 check_logical(NULL, allow_null = TRUE)
+check_logical(NA, allow_na = TRUE)
+
 }

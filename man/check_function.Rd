@@ -2,22 +2,51 @@
 % Please edit documentation in R/check_function.R
 \name{check_function}
 \alias{check_function}
-\title{Check a function for typical errors}
+\title{Check a Function for Typical Errors}
 \usage{
 check_function(function_arg, allow_null = FALSE)
 }
 \arguments{
-\item{function_arg}{function to check.}
+\item{function_arg}{Function to check.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 }
 \value{
-Invisibly returns \code{function_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{function_arg} if all checks pass;
+otherwise throws an error.
 }
 \description{
-Validates a single function argument for type and NULL function.
+Validates a single function argument for type and NULL.
+Provides consistent error messages that include the argument name and
+calling function name.
+}
+\details{
+This function validates that the input is a callable function object.
+Checks in sequence:
+\enumerate{
+\item Validates logical parameters
+\item Checks if NULL when not allowed
+\item Returns NULL early if allowed
+\item Checks if input is a function type
+}
+
+\strong{What is a function?} In R, functions are first-class objects that can
+be passed as arguments. This includes:
+\itemize{
+\item Built-in functions (mean, sum, etc.)
+\item User-defined functions
+\item Anonymous functions
+\item Closures
+}
 }
 \examples{
 check_function(mean)
+check_function(function(x) x + 1)
 check_function(NULL, allow_null = TRUE)
+
+\dontrun{
+check_function("not a function")  # Error
+check_function(NULL)  # Error
+}
+
 }

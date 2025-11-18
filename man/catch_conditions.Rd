@@ -14,28 +14,52 @@ catch_conditions(expr, default = NULL)
 \value{
 A list with elements:
 \itemize{
-\item \code{value} — The evaluation result or the fallback \code{default} if an error occurred.
-\item \code{warning} — A list of captured warning condition objects (or \code{NULL} if none).
-\item \code{message} — A list of captured message condition objects (or \code{NULL} if none).
-\item \code{error} — An error condition object if an error occurred (or \code{NULL} otherwise).
+\item \code{value}: The evaluation result or the \code{default} if error occurred
+\item \code{error}: Error condition object (or NULL if none)
+\item \code{warning}: List of warning condition objects (or NULL if none)
+\item \code{message}: List of message condition objects (or NULL if none)
 }
 }
 \description{
-Evaluates an expression while capturing and returning any warning, message, or error conditions as structured objects.
-This allows advanced inspection of errors and warnings (including class, call, and metadata) instead of storing only their messages.
+Evaluates an expression while capturing and returning any warning, message,
+or error conditions as structured objects. This allows advanced inspection of
+errors and warnings instead of storing only their messages.
+}
+\details{
+This function uses R's condition handling system to capture three types of
+conditions:
+\itemize{
+\item \strong{Errors} (class inherits from "error"): Stops execution
+\item \strong{Warnings} (class inherits from "warning"): Non-fatal issues
+\item \strong{Messages} (class inherits from "message"): Informational output
+}
+
+Unlike \code{tryCatch()}, this captures the condition \emph{objects} themselves,
+which include:
+\itemize{
+\item The message text
+\item The call that generated it
+\item The condition class
+\item Any custom fields
+}
+
+Multiple warnings and messages are collected in a list.
 }
 \examples{
-# 1. Normal evaluation
-catch_conditions({ 2 + 2 })
+# Normal evaluation with no conditions
+result <- catch_conditions({ 2 + 2 })
+print(result$value)  # 4
 
-# 2. Capture warnings and messages
-catch_conditions({
-  message("Computation started")
-  log(-1)
+# Capture warnings
+result <- catch_conditions({
+  x <- c(1, 2, NA)
+  mean(x)
 })
 
-# 3. Capture error and return fallback
-res <- catch_conditions(stop("Critical failure"), default = NA)
-res$error[[1]]$message    # Inspect full error object
+# Capture error with default value
+result <- catch_conditions({
+  stop("Something went wrong!")
+}, default = NA)
+print(result$error$message)
 
 }

@@ -22,5 +22,6 @@ test_that("indirect allow_null works", {
 test_that("indirect must_have_names works", {
   expect_equal(test_check_list(list(a=10, b="abc")), list(a=10, b="abc"))
   expect_equal(test_check_list(list(a=10, b="abc"), must_have_names = TRUE), list(a=10, b="abc"))
-  expect_error(test_check_list(list(a=10, b="abc", b=1:10), must_have_names = TRUE), "Argument 'lst' in function 'test_check_list' must be a list with unique names unequal to ''.")
+  expect_error(test_check_list(list(a=10, b="abc", b=1:10), must_have_names = TRUE),
+               "Argument 'lst' in function 'test_check_list' names must be unique.")
 })

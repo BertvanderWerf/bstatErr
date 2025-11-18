@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_string_vector.R
 \name{check_string_vector}
 \alias{check_string_vector}
-\title{Check a string vector for typical errors}
+\title{Check a String Vector for Typical Errors}
 \usage{
 check_string_vector(
   string_arg,
@@ -15,27 +15,42 @@ check_string_vector(
 )
 }
 \arguments{
-\item{string_arg}{string to check.}
+\item{string_arg}{Character vector to check.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 
-\item{allow_na}{Logical. If TRUE, NA strings are allowed. Default is FALSE.}
+\item{allow_na}{Logical. If TRUE, NA values allowed. Default FALSE.}
 
-\item{allow_zero_length}{Logical. If TRUE, zero length vectors are allowed. Default is FALSE}
+\item{allow_zero_length}{Logical. If TRUE, zero-length vectors allowed. Default FALSE.}
 
-\item{allow_empty}{Logical. If TRUE, empty strings ("") are allowed. Default is FALSE}
+\item{allow_empty}{Logical. If TRUE, empty strings allowed. Default FALSE.}
 
-\item{allow_duplicates}{Logical. If TRUE, duplicate values are allowed. Default is FALSE}
+\item{allow_duplicates}{Logical. If TRUE, duplicate values allowed. Default FALSE.}
 
-\item{must_have_names}{Logical. If TRUE, vector elements must have unique names. Default is FALSE.}
+\item{must_have_names}{Logical. If TRUE, vector must be named. Default FALSE.}
 }
 \value{
-Invisibly returns \code{string_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{string_arg} if all checks pass.
 }
 \description{
-Validates a single string argument for type, length, NA, "" and NULL string value.
+Validates a character vector for type, NA, empty strings, duplicates, length,
+and optional naming requirements.
+}
+\details{
+Validates in sequence:
+\enumerate{
+\item Checks if NULL when not allowed
+\item Checks if character type
+\item Checks for zero length when not allowed
+\item Checks for NA values when not allowed
+\item Checks for empty strings when not allowed
+\item Checks for duplicates when not allowed
+\item Checks for required names and uniqueness
+}
 }
 \examples{
-check_string_vector(c("a","b","c",NaN))
+check_string_vector(c("a", "b", "c"))
+check_string_vector(c("x", "y"), allow_duplicates = TRUE)
 check_string_vector(NULL, allow_null = TRUE)
+
 }

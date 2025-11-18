@@ -8,15 +8,16 @@ test_that("indirect basic check succeeds", {
 })
 
 test_that("indirect type error", {
-  expect_error(test_check_string_vector(123), "Argument 'str' in function 'test_check_string_vector' must be a string value.")
+  expect_error(test_check_string_vector(123), "Argument 'str' in function 'test_check_string_vector' must be a character vector.")
 })
 
 test_that("indirect null error", {
-  expect_error(test_check_string_vector(NULL), "Argument 'str' in function 'test_check_string_vector' must be a non-NULL string value.")
+  expect_error(test_check_string_vector(NULL), "Argument 'str' in function 'test_check_string_vector' must be a non-NULL character vector.")
 })
 
 test_that("indirect length error", {
-  expect_error(test_check_string_vector(character(0), allow_zero_length=FALSE), "Argument 'str' in function 'test_check_string_vector' has zero length, the vector must have at least one value.")
+  expect_error(test_check_string_vector(character(0), allow_zero_length=FALSE),
+               "Argument 'str' in function 'test_check_string_vector' has zero length; must have at least one element.")
 })
 
 test_that("indirect missing value error", {
@@ -37,11 +38,14 @@ test_that("indirect allow_empty works", {
 
 test_that("indirect allow_duplicates works", {
   expect_true(sum("a"==test_check_string_vector(c("a", "a", "b"), allow_duplicates = TRUE))==2)
-  expect_error(test_check_string_vector(c("a", "a", "b"), allow_duplicates = FALSE), "Argument 'str' in function 'test_check_string_vector' must not contain duplicated values.")
+  expect_error(test_check_string_vector(c("a", "a", "b"), allow_duplicates = FALSE),
+               "Argument 'str' in function 'test_check_string_vector' must not contain duplicate values.")
 })
 
 test_that("indirect must_have_names works", {
   expect_equal(test_check_string_vector(c(a="xyz", b="abc")), c(a="xyz", b="abc"))
   expect_equal(test_check_string_vector(c(a="xyz", b="abc"), must_have_names = TRUE), c(a="xyz", b="abc"))
-  expect_error(test_check_string_vector(c(a="xyz", b="abc", "XYZ"), must_have_names = TRUE), "Argument 'str' in function 'test_check_string_vector' must be a vector with unique names unequal to ''.")
+  expect_error(test_check_string_vector(c(a="xyz", b="abc", "XYZ"), must_have_names = TRUE),
+               "Argument 'str' in function 'test_check_string_vector' must have names for all elements.")
 })
+

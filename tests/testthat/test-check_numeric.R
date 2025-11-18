@@ -20,7 +20,8 @@ test_that("indirect length error", {
 })
 
 test_that("indirect missing value error", {
-  expect_error(test_check_numeric(as.numeric(NA)), "Argument 'num' in function 'test_check_numeric' must not be NA or NaN.")
+  expect_error(test_check_numeric(as.numeric(NA)), "Argument 'num' in function 'test_check_numeric' must not contain missing values (NA or NaN).",
+               fixed=TRUE)
 })
 
 test_that("indirect allow_null works", {
@@ -34,3 +35,4 @@ test_that("indirect allow_na works", {
 test_that("indirect allow_inf works", {
   expect_true(is.infinite(test_check_numeric(Inf, allow_inf = TRUE)))
 })
+

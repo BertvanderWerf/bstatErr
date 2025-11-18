@@ -1,21 +1,43 @@
-#' Check a list for typical errors
+#' Check a List for Typical Errors
 #'
-#' Validates a single list argument for type and NULL list value.
+#' Validates a list argument for type, NULL, and optional naming requirements.
 #'
-#' @param list_arg list to check.
-#' @param allow_null Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.
-#' @param must_have_names Logical. If TRUE, list must have unique names. Default is FALSE.
+#' @details
+#' Validates in sequence:
+#' \enumerate{
+#'   \item Validates logical parameters
+#'   \item Checks if NULL when not allowed
+#'   \item Checks if input is list type
+#'   \item Checks for required names and uniqueness
+#' }
 #'
-#' @return Invisibly returns \code{list_arg} if all checks pass; otherwise throws an error.
+#' @param list_arg List to check.
+#' @param allow_null Logical. If TRUE, NULL is accepted. Default FALSE.
+#' @param must_have_names Logical. If TRUE, all elements must have names. Default FALSE.
+#'
+#' @return Invisibly returns \code{list_arg} if all checks pass.
+#'
 #' @examples
-#' check_list(list("abc",c(1,2,3)))
+#' check_list(list(a = 1, b = 2))
+#' check_list(list(1, 2, 3))
 #' check_list(NULL, allow_null = TRUE)
+#'
 #' @export
 check_list <- function(list_arg,
                        allow_null = FALSE,
                        must_have_names = FALSE) {
 
-  # Check for NULL if not allowed
+  # ============================================================================
+  # VALIDATE LOGICAL PARAMETERS
+  # ============================================================================
+
+  allow_null <- check_logical(allow_null)
+  must_have_names <- check_logical(must_have_names)
+
+  # ============================================================================
+  # CHECK FOR NULL
+  # ============================================================================
+
   if (is.null(list_arg) && isFALSE(allow_null)) {
     stop(
       sprintf(
@@ -27,11 +49,15 @@ check_list <- function(list_arg,
     )
   }
 
-  # NULL does not have a type, return NULL, no further tests should be done
-  if (is.null(list_arg)) return(NULL)
+  if (is.null(list_arg)) {
+    return(invisible(NULL))
+  }
 
-  # Check type if not NULL
-  if (!is.null(list_arg) && !is.list(list_arg)) {
+  # ============================================================================
+  # CHECK TYPE
+  # ============================================================================
+
+  if (!is.list(list_arg)) {
     stop(
       sprintf(
         "Argument '%s' in function '%s' must be a list.",
@@ -42,13 +68,18 @@ check_list <- function(list_arg,
     )
   }
 
-  # Check if list must have names
-  if (!is.null(list_arg) && isTRUE(must_have_names) &&
-      (is.null(names(list_arg)) || any(!is.na(names(list_arg)) & names(list_arg)=='') || any(duplicated(names(list_arg))))
-     ) {
+  # ============================================================================
+  # CHECK FOR REQUIRED NAMES
+  # ============================================================================
+
+  if (isTRUE(must_have_names)) {
+    list_names <- names(list_arg)
+
+    # Check if list has names
+    if (is.null(list_names) || any(list_names == "")) {
     stop(
       sprintf(
-        "Argument '%s' in function '%s' must be a list with unique names unequal to ''.",
+          "Argument '%s' in function '%s' must have names for all elements.",
         as.character(substitute(list_arg)),
         deparse(sys.call(sys.parent())[[1]])
       ),
@@ -56,6 +87,22 @@ check_list <- function(list_arg,
     )
   }
 
-  # All checks passed; return the list argument
+    # Check if names are unique
+    if (any(duplicated(list_names))) {
+      stop(
+        sprintf(
+          "Argument '%s' in function '%s' names must be unique.",
+          as.character(substitute(list_arg)),
+          deparse(sys.call(sys.parent())[[1]])
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
+  # ============================================================================
+  # RETURN VALIDATED VALUE
+  # ============================================================================
+
   invisible(list_arg)
 }

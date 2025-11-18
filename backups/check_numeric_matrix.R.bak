@@ -1,0 +1,113 @@
+check_numeric_matrix <- function(numeric_matrix_arg,
+                                 allow_null = FALSE,
+                                 allow_na = FALSE,
+                                 allow_inf = FALSE,
+                                 allow_zero_length = FALSE,
+                                 must_be_square = FALSE,
+                                 must_be_symmetric = FALSE) {
+
+  check_logical(allow_null)
+  check_logical(allow_na)
+  check_logical(allow_inf)
+  check_logical(allow_zero_length)
+  check_logical(must_be_square)
+  check_logical(must_be_symmetric)
+
+  if (isTRUE(must_be_symmetric)) must_be_square <- TRUE
+
+  # Check for NULL if not allowed
+  if (is.null(numeric_matrix_arg) && isFALSE(allow_null)) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a non-NULL numeric matrix.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # NULL does not have a type, return NULL, no further tests should be done
+  if (is.null(numeric_matrix_arg)) return(NULL)
+
+  # NA or NaN can be of any type return as.numeric(numeric_matrix_arg), no further test should be done
+  if (!is.null(numeric_matrix_arg) && length(numeric_matrix_arg)==1 && isTRUE(allow_na) && is.na(numeric_matrix_arg))
+    return(as.matrix(numeric_matrix_arg, 1, 1))
+
+  # Check type if not NULL
+  if (!is.null(numeric_matrix_arg) && !is.numeric(numeric_matrix_arg) && !is.matrix(numeric_matrix_arg)) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a numeric matrix",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check length == 0 if not NULL
+  if (!is.null(numeric_matrix_arg) && length(numeric_matrix_arg) == 0 && isFALSE(allow_zero_length)) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' has zero length, the matrix must have at least one value.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check for NA values if not allowed
+  if (!is.null(numeric_matrix_arg) && isFALSE(allow_na) && any(is.na(numeric_matrix_arg))) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must not contain missing values.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check for non finite values if not allowed
+  if (!is.null(numeric_matrix_arg) && isFALSE(allow_inf) && any(!is.na(numeric_matrix_arg) & is.infinite(numeric_matrix_arg))) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must not contain missing values.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check if matrix must be square
+  if (!is.null(numeric_matrix_arg) && isTRUE(must_be_square) && ncol(numeric_matrix_arg) != nrow(numeric_matrix_arg)
+  ) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a a square matrix.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # Check if matrix must be symmetric
+  if (!is.null(numeric_matrix_arg) && isTRUE(must_be_square) && ncol(numeric_matrix_arg) != nrow(numeric_matrix_arg)
+  ) {
+    stop(
+      sprintf(
+        "Argument '%s' in function '%s' must be a a symmetric quare matrix.",
+        as.character(substitute(numeric_matrix_arg)),
+        deparse(sys.call(sys.parent())[[1]])
+      ),
+      call. = FALSE
+    )
+  }
+
+  # All checks passed; return the numeric argument
+  invisible(numeric_matrix_arg)
+}

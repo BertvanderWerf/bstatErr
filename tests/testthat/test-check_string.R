@@ -20,11 +20,15 @@ test_that("indirect length error", {
 })
 
 test_that("indirect missing value error", {
-  expect_error(test_check_string(as.character(NA)), "Argument 'str' in function 'test_check_string' must not be NA or NaN.")
+  expect_error(test_check_string(as.character(NA)),
+               "Argument 'str' in function 'test_check_string' must not contain missing values (NA or NaN).",
+               fixed = TRUE)
+  expect_error(test_check_string(NaN), "Argument 'str' in function 'test_check_string' must be a character string.")
+  expect_error(test_check_string(NA), "Argument 'str' in function 'test_check_string' must be a character string.")
 })
 
 test_that("indirect empty string error", {
-  expect_error(test_check_string(''), "Argument 'str' in function 'test_check_string' must not be an empty character string.")
+  expect_error(test_check_string(''), "Argument 'str' in function 'test_check_string' must not be an empty string.")
 })
 
 test_that("indirect allow_null works", {
@@ -38,3 +42,4 @@ test_that("indirect allow_na works", {
 test_that("indirect allow_empty works", {
   expect_equal(test_check_string(c(""), allow_empty = TRUE), '')
 })
+

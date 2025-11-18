@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_numeric.R
 \name{check_numeric}
 \alias{check_numeric}
-\title{Check a numeric for typical errors}
+\title{Check a Numeric Value for Typical Errors}
 \usage{
 check_numeric(
   numeric_arg,
@@ -12,21 +12,74 @@ check_numeric(
 )
 }
 \arguments{
-\item{numeric_arg}{numeric to check.}
+\item{numeric_arg}{Numeric value to check. Can be a single value or vector
+of length 1.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value.
+Default is FALSE.}
 
-\item{allow_na}{Logical. If TRUE, NA numerics are allowed. Default is FALSE.}
+\item{allow_na}{Logical. If TRUE, NA values are allowed. Default is FALSE.}
 
-\item{allow_inf}{Logical. If TRUE, -Inf and Inf numerics are allowed. Default is FALSE.}
+\item{allow_inf}{Logical. If TRUE, -Inf or Inf values are allowed.
+Default is FALSE.}
 }
 \value{
-Invisibly returns \code{numeric_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{numeric_arg} if all checks pass;
+otherwise throws an error with a descriptive message.
 }
 \description{
-Validates a single numeric argument for type, length, NA and NULL numeric value.
+Validates a single numeric argument for type, NA values, and infinity.
+Provides consistent error messages that include the argument name and
+calling function name.
+}
+\details{
+This function performs validation checks in the following sequence:
+\enumerate{
+\item Checks if NULL when not allowed
+\item Returns NULL early if allowed (no further checks)
+\item Handles single NA value specially when allowed
+\item Checks if input is numeric type
+\item Checks for NA values when not allowed
+\item Checks for infinite values when not allowed
+}
+
+\strong{Important:} A numeric value in R includes integers and doubles.
+Both \code{1}, \code{1L}, and \code{1.0} are numeric.
+
+\strong{NA vs Inf:} NA values are missing data; Inf/-Inf are infinite values.
+Both can occur in numeric data but represent different issues.
+}
+\note{
+Error messages include:
+\itemize{
+\item The argument name (from substitute())
+\item The calling function name (from sys.call())
+\item Specific reason for failure
+}
+
+This makes debugging easier in nested function calls.
 }
 \examples{
-check_numeric(TRUE)
+# Valid numeric values
+check_numeric(3.14)
+check_numeric(42)
+check_numeric(-1.5)
+
+# Allow NULL
 check_numeric(NULL, allow_null = TRUE)
+
+# Allow NA
+check_numeric(NA_real_, allow_na = TRUE)
+
+# Allow Inf
+check_numeric(Inf, allow_inf = TRUE)
+
+\dontrun{
+# These will fail:
+check_numeric("not a number")  # Type error
+check_numeric(NULL)  # NULL not allowed
+check_numeric(NA)  # NA not allowed
+check_numeric(Inf)  # Inf not allowed
+}
+
 }

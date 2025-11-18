@@ -2,24 +2,34 @@
 % Please edit documentation in R/check_data_frame.R
 \name{check_data_frame}
 \alias{check_data_frame}
-\title{Check a data.frame for typical errors}
+\title{Check a Data Frame for Typical Errors}
 \usage{
-check_data_frame(data_frame_arg, allow_null = FALSE, allow_zero_length = FALSE)
+check_data_frame(data_frame_arg, allow_null = FALSE, allow_zero_rows = FALSE)
 }
 \arguments{
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{data_frame_arg}{Data frame to check.}
 
-\item{allow_zero_length}{Logical. If TRUE, a data frame with zero number of rows is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted. Default FALSE.}
 
-\item{data.frame_arg}{data.frame to check.}
+\item{allow_zero_rows}{Logical. If TRUE, empty data frames allowed. Default FALSE.}
 }
 \value{
-Invisibly returns \code{data_frame_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{data_frame_arg} if all checks pass.
 }
 \description{
-Validates a single data.frame argument for type, length, NA and NULL data.frame value.
+Validates a data frame argument for type, NULL, and number of rows.
+}
+\details{
+Validates in sequence:
+\enumerate{
+\item Validates logical parameters
+\item Checks if NULL when not allowed
+\item Checks if input is data.frame type
+\item Checks for zero rows when not allowed
+}
 }
 \examples{
-check_data.frame(data.frame("abc",c(1,2,3)))
-check_data.frame(NULL, allow_null = TRUE)
+check_data_frame(mtcars)
+check_data_frame(NULL, allow_null = TRUE)
+
 }

@@ -19,7 +19,8 @@ test_that("indirect allow_null works", {
   expect_equal(test_check_data_frame(NULL, allow_null = TRUE), NULL)
 })
 
-test_that("indirect allow_zero_length works", {
-  expect_equal(test_check_data_frame(data.frame(a=character(0), b=numeric(0)), allow_zero_length = TRUE), data.frame(a=character(0), b=numeric(0)))
-  expect_error(test_check_data_frame(data.frame(a=character(0), b=numeric(0)), allow_zero_length = FALSE), "Argument 'df' in function 'test_check_data_frame' must at least have 1 row in the data.frame.")
+test_that("indirect allow_zero_rows works", {
+  expect_equal(test_check_data_frame(data.frame(a=character(0), b=numeric(0)), allow_zero_rows = TRUE), data.frame(a=character(0), b=numeric(0)))
+  expect_error(test_check_data_frame(data.frame(a=character(0), b=numeric(0)), allow_zero_rows = FALSE),
+               "Argument 'df' in function 'test_check_data_frame' has zero rows; must have at least one row.")
 })

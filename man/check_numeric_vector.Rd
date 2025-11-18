@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_numeric_vector.R
 \name{check_numeric_vector}
 \alias{check_numeric_vector}
-\title{Check a numeric for typical errors}
+\title{Check a Numeric Vector for Typical Errors}
 \usage{
 check_numeric_vector(
   numeric_arg,
@@ -14,25 +14,95 @@ check_numeric_vector(
 )
 }
 \arguments{
-\item{numeric_arg}{numeric to check.}
+\item{numeric_arg}{Numeric vector to check.}
 
-\item{allow_null}{Logical. If TRUE, NULL is accepted as a valid value. Default is FALSE.}
+\item{allow_null}{Logical. If TRUE, NULL is accepted as valid. Default FALSE.}
 
-\item{allow_na}{Logical. If TRUE, NA numerics are allowed. Default is FALSE.}
+\item{allow_na}{Logical. If TRUE, NA values allowed in vector. Default FALSE.}
 
-\item{allow_inf}{Logical. If TRUE, -Inf or Inf numerics are allowed. Default is FALSE.}
+\item{allow_inf}{Logical. If TRUE, -Inf or Inf values allowed. Default FALSE.}
 
-\item{allow_zero_length}{Logical. If TRUE, zero length vectors are allowed. Default is FALSE}
+\item{allow_zero_length}{Logical. If TRUE, zero-length vectors allowed. Default FALSE.}
 
-\item{must_have_names}{Logical. If TRUE, vector elements must have unique names. Default is FALSE.}
+\item{must_have_names}{Logical. If TRUE, all elements must have unique names. Default FALSE.}
 }
 \value{
-Invisibly returns \code{numeric_arg} if all checks pass; otherwise throws an error.
+Invisibly returns \code{numeric_arg} if all checks pass;
+otherwise throws an error with descriptive message.
 }
 \description{
-Validates a single numeric argument for type, length, NA and NULL numeric value.
+Validates a numeric vector argument for type, length, NA values, infinity,
+and optional naming requirements. Provides consistent error messages that
+include the argument name and calling function name.
+}
+\details{
+This function performs validation checks in sequence:
+\enumerate{
+\item Validates all logical parameters
+\item Checks if NULL when not allowed
+\item Returns NULL early if allowed (no further checks)
+\item Handles single NA value specially when allowed
+\item Checks if input is numeric type
+\item Checks for zero length when not allowed
+\item Checks for NA values when not allowed
+\item Checks for infinite values when not allowed
+\item Checks for required names and uniqueness
+}
+
+\strong{Numeric Vectors in R:}
+A numeric vector can contain integers, doubles, or a mix of both.
+All of these are numeric vectors: \code{c(1, 2, 3)}, \code{c(1.5, 2.7)},
+\code{1:10}, \code{seq(0, 1, 0.1)}.
+
+\strong{NA vs Inf:}
+\itemize{
+\item NA represents missing data (unknown value)
+\item Inf/-Inf represents mathematical infinity
+\item Both can occur in numeric vectors but mean different things
+}
+}
+\note{
+\strong{Error messages include:}
+\itemize{
+\item The argument name (from substitute())
+\item The calling function name (from sys.call())
+\item Specific reason for failure
+}
+
+\strong{Name checking:}
+When \code{must_have_names = TRUE}, the function checks:
+\itemize{
+\item All elements have names (not NULL)
+\item No empty string names ("")
+\item All names are unique
+}
 }
 \examples{
-check_numeric_vector(TRUE)
+# Valid numeric vectors
+check_numeric_vector(c(1, 2, 3))
+check_numeric_vector(c(1.5, 2.7, 3.9))
+check_numeric_vector(1:10)
+
+# Allow NULL
 check_numeric_vector(NULL, allow_null = TRUE)
+
+# Allow NA values
+check_numeric_vector(c(1, 2, NA, 4), allow_na = TRUE)
+
+# Allow Inf values
+check_numeric_vector(c(1, Inf, -Inf), allow_inf = TRUE)
+
+# Require names
+check_numeric_vector(c(a = 1, b = 2, c = 3), must_have_names = TRUE)
+
+\dontrun{
+# These will fail:
+check_numeric_vector("not numeric")  # Type error
+check_numeric_vector(NULL)  # NULL not allowed
+check_numeric_vector(numeric(0))  # Zero length not allowed
+check_numeric_vector(c(1, NA))  # NA not allowed
+check_numeric_vector(c(1, Inf))  # Inf not allowed
+check_numeric_vector(c(1, 2), must_have_names = TRUE)  # No names
+}
+
 }
