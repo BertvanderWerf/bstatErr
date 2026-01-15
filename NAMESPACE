@@ -2,6 +2,7 @@
 
 export(catch_conditions)
 export(check_data_frame)
+export(check_factor)
 export(check_function)
 export(check_list)
 export(check_logical)
